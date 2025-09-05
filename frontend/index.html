@@ -5,67 +5,37 @@
   <title>Voting App</title>
   <link rel="stylesheet" href="style.css">
   <script defer src="app.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f7f7f7; }
-    h1 { text-align: center; }
-    .section { 
-      border: 1px solid #ccc; 
-      background: #fff; 
-      padding: 20px; 
-      margin: 20px auto; 
-      max-width: 400px; 
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    input, select, button { 
-      display: block; 
-      width: 100%; 
-      margin: 10px 0; 
-      padding: 10px; 
-      font-size: 14px; 
-    }
-    button { 
-      background: #007bff; 
-      color: white; 
-      border: none; 
-      cursor: pointer; 
-      border-radius: 5px; 
-    }
-    button:hover { background: #0056b3; }
-    p { color: red; font-size: 14px; }
-  </style>
 </head>
 <body>
-  <h1>Voting App</h1>
+  <div class="container">
+    <h1>Voting App</h1>
 
-  <!-- Login -->
-  <div class="section">
-    <h2>Login</h2>
-    <input type="text" id="loginAadhar" placeholder="Aadhar Number" required>
-    <input type="password" id="loginPassword" placeholder="Password" required>
-    <button onclick="login()">Login</button>
-    <p id="loginMsg"></p>
-  </div>
+    <!-- Login Card -->
+    <div class="card">
+      <h2>Login</h2>
+      <input type="text" id="loginAadhar" placeholder="Aadhar Number" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button onclick="login()">Login</button>
+      <p class="error" id="loginMsg"></p>
+    </div>
 
-  <!-- Signup -->
-  <div class="section">
-    <h2>Signup</h2>
-    <input type="text" id="signupName" placeholder="Full Name" required>
-    <input type="number" id="signupAge" placeholder="Age" required>
-    <input type="email" id="signupEmail" placeholder="Email" required>
-    <input type="text" id="signupMobile" placeholder="Mobile Number">
-    <input type="text" id="signupAddress" placeholder="Address" required>
-    <input type="text" id="signupAadhar" placeholder="Aadhar Number" required>
-    <input type="password" id="signupPassword" placeholder="Password" required>
-
-    <!-- Role field (first admin should select admin, rest as voter) -->
-    <select id="signupRole">
-      <option value="voter">Voter</option>
-      <option value="admin">Admin (first use only!)</option>
-    </select>
-
-    <button onclick="signup()">Signup</button>
-    <p id="signupMsg"></p>
+    <!-- Signup Card -->
+    <div class="card">
+      <h2>Signup</h2>
+      <input type="text" id="signupName" placeholder="Full Name" required>
+      <input type="number" id="signupAge" placeholder="Age" required>
+      <input type="email" id="signupEmail" placeholder="Email" required>
+      <input type="text" id="signupMobile" placeholder="Mobile Number">
+      <input type="text" id="signupAddress" placeholder="Address" required>
+      <input type="text" id="signupAadhar" placeholder="Aadhar Number" required>
+      <input type="password" id="signupPassword" placeholder="Password" required>
+      <select id="signupRole">
+        <option value="voter">Voter</option>
+        <option value="admin">Admin (first use only!)</option>
+      </select>
+      <button onclick="signup()">Signup</button>
+      <p class="error" id="signupMsg"></p>
+    </div>
   </div>
 </body>
-</html>  
+</html>

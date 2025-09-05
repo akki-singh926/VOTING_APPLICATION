@@ -4,64 +4,134 @@
   <meta charset="UTF-8">
   <title>Voting Dashboard</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script defer src="app.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    input, button { margin: 5px; padding: 8px; }
-    .candidate { margin-bottom: 10px; }
-    #results p { margin: 3px 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .panel {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    input, button {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background: #3498db;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .candidate {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      border-radius: 5px;
+      background: #f9f9f9;
+      transition: 0.2s;
+    }
+    .candidate:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .msg {
+      font-weight: bold;
+      color: green;
+      margin-top: 5px;
+    }
+    .btn-logout {
+      float: right;
+      margin-bottom: 20px;
+      background: #e74c3c;
+    }
+    .btn-refresh {
+      margin-top: 10px;
+      background: #1abc9c;
+    }
+    #results p {
+      background: #ecf0f1;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 5px 0;
+      display: flex;
+      justify-content: space-between;
+    }
   </style>
 </head>
 <body>
-  <h1>Welcome to the Voting Dashboard</h1>
-  <button onclick="logout()">Logout</button>
+  <div class="container">
+    <h1>Voting Dashboard</h1>
+    <button class="btn-logout" onclick="logout()">Logout</button>
 
-  <!-- ================= ADMIN SECTION ================= -->
-  <div id="adminPanel" style="display:none;">
-    <h2>Admin Panel</h2>
-
-    <!-- Add Candidate -->
-    <div>
-      <input type="text" id="cName" placeholder="Candidate Name">
-      <input type="text" id="cParty" placeholder="Party">
-      <input type="number" id="cAge" placeholder="Age">
-      <button onclick="addCandidate()">Add Candidate</button>
-      <p id="adminMsg" style="color:green;"></p>
+    <!-- USER PROFILE -->
+    <div id="profileInfo" class="panel">
+      <h2>Your Profile</h2>
+      <p><strong>Name:</strong> <span id="profileName">Loading...</span></p>
+      <p><strong>Email:</strong> <span id="profileEmail">Loading...</span></p>
+      <p><strong>Age:</strong> <span id="profileAge">Loading...</span></p>
+      <p><strong>Role:</strong> <span id="profileRole">Loading...</span></p>
     </div>
 
-    <!-- Manage Candidates -->
-    <h3>Manage Candidates</h3>
-    <div id="adminCandidates"></div>
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="panel" style="display:none;">
+      <h2>Admin Panel</h2>
+      <div class="card">
+        <input type="text" id="cName" placeholder="Candidate Name">
+        <input type="text" id="cParty" placeholder="Party">
+        <input type="number" id="cAge" placeholder="Age">
+        <button onclick="addCandidate()">Add Candidate</button>
+        <p id="adminMsg" class="msg"></p>
+      </div>
+      <h3>Manage Candidates</h3>
+      <div id="adminCandidates" class="grid"></div>
+    </div>
+
+    <!-- VOTER PANEL -->
+    <div id="votePanel" class="panel" style="display:none;">
+      <h2>Candidates</h2>
+      <div id="candidates" class="grid"></div>
+
+      <h2>Results</h2>
+      <button onclick="loadResults()" class="btn-refresh">Refresh Results</button>
+      <div id="results"></div>
+      <canvas id="resultsChart" height="250"></canvas>
+    </div>
   </div>
-
-  <!-- ================= VOTER SECTION ================= -->
-  <div id="votePanel" style="display:none;">
-    <h2>Candidates</h2>
-    <div id="candidates"></div>
-
-    <h2>Results</h2>
-    <button onclick="loadResults()">Refresh Results</button>
-    <div id="results"></div>
-  </div>
-
-  <script>
-    // Auto-load candidates & results for voters
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.location.pathname.includes("dashboard.html")) {
-        if (!localStorage.getItem("token")) {
-          window.location.href = "index.html";
-        } else {
-          // Setup dashboard based on role
-          const role = localStorage.getItem("role");
-          if (role === "voter") {
-            loadCandidates();
-            loadResults();
-          } else if (role === "admin") {
-            loadAdminCandidates();
-          }
-        }
-      }
-    });
-  </script>
 </body>
-</html>  
+</html>
