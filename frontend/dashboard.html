@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Voting Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input, button { margin: 5px; padding: 8px; }
+    .candidate { margin-bottom: 10px; }
+    #results p { margin: 3px 0; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Voting Dashboard</h1>
+  <button onclick="logout()">Logout</button>
+
+  <!-- ================= ADMIN SECTION ================= -->
+  <div id="adminPanel" style="display:none;">
+    <h2>Admin Panel</h2>
+
+    <!-- Add Candidate -->
+    <div>
+      <input type="text" id="cName" placeholder="Candidate Name">
+      <input type="text" id="cParty" placeholder="Party">
+      <input type="number" id="cAge" placeholder="Age">
+      <button onclick="addCandidate()">Add Candidate</button>
+      <p id="adminMsg" style="color:green;"></p>
+    </div>
+
+    <!-- Manage Candidates -->
+    <h3>Manage Candidates</h3>
+    <div id="adminCandidates"></div>
+  </div>
+
+  <!-- ================= VOTER SECTION ================= -->
+  <div id="votePanel" style="display:none;">
+    <h2>Candidates</h2>
+    <div id="candidates"></div>
+
+    <h2>Results</h2>
+    <button onclick="loadResults()">Refresh Results</button>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    // Auto-load candidates & results for voters
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.location.pathname.includes("dashboard.html")) {
+        if (!localStorage.getItem("token")) {
+          window.location.href = "index.html";
+        } else {
+          // Setup dashboard based on role
+          const role = localStorage.getItem("role");
+          if (role === "voter") {
+            loadCandidates();
+            loadResults();
+          } else if (role === "admin") {
+            loadAdminCandidates();
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>  
