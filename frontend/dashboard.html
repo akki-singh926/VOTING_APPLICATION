@@ -13,6 +13,7 @@
       margin: 0;
       padding: 0;
     }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -21,7 +22,21 @@
       background: #3498db;
       color: white;
     }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+
     header h1 { margin: 0; font-size: 24px; }
+
     nav button {
       margin-left: 10px;
       padding: 8px 16px;
@@ -31,6 +46,7 @@
       cursor: pointer;
       transition: 0.3s;
     }
+
     nav button.logout { background: #e74c3c; color: white; }
     nav button:hover { opacity: 0.8; }
 
@@ -39,7 +55,9 @@
       margin: 20px auto;
       padding: 20px;
     }
+
     h1, h2, h3 { text-align: center; color: #2c3e50; }
+
     .panel {
       background: #fff;
       padding: 20px;
@@ -47,6 +65,7 @@
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
+
     input, button {
       width: 100%;
       margin: 8px 0;
@@ -56,6 +75,7 @@
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
+
     button {
       background: #3498db;
       border: none;
@@ -64,12 +84,15 @@
       cursor: pointer;
       transition: 0.3s;
     }
+
     button:hover { background: #2980b9; }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
+
     .candidate {
       display: flex;
       justify-content: space-between;
@@ -80,7 +103,9 @@
       background: #f9f9f9;
       transition: 0.2s;
     }
+
     .candidate:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
     .msg { font-weight: bold; color: green; margin-top: 5px; }
     .btn-logout { float: right; margin-bottom: 20px; background: #e74c3c; }
     .btn-refresh { margin-top: 10px; background: #1abc9c; }
@@ -103,7 +128,10 @@
 </head>
 <body>
   <header>
-    <h1>Voting Dashboard</h1>
+    <div class="logo-container">
+      <img src="vote.jpeg" alt="Voting Logo" class="logo">
+      <h1>Voting Dashboard</h1>
+    </div>
     <nav>
       <button class="logout" onclick="logout()">Logout</button>
     </nav>

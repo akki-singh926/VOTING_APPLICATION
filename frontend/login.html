@@ -7,26 +7,68 @@
   <script defer src="app.js"></script>
   <style>
     body { margin:0; font-family: Arial, sans-serif; background:#f4f4f9; }
+
     header {
       display:flex; justify-content:space-between; align-items:center;
       padding:15px 30px; background:#3498db; color:white;
     }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+
     header h1 { margin:0; font-size:24px; }
-    nav button { margin-left:10px; padding:8px 16px; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
+
+    nav button {
+      margin-left:10px; padding:8px 16px; border:none;
+      border-radius:5px; cursor:pointer; font-weight:bold;
+      transition:0.3s;
+    }
+
     nav button.login { background:#1abc9c; color:white; }
     nav button.signup { background:#e67e22; color:white; }
     nav button:hover { opacity:0.8; }
-    .container { max-width:400px; margin:80px auto; padding:30px; background:white; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); }
+
+    .container {
+      max-width:400px; margin:80px auto; padding:30px;
+      background:white; border-radius:10px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.2);
+    }
+
     h2 { text-align:center; color:#2c3e50; }
-    input, button { width:100%; margin:10px 0; padding:10px; font-size:14px; border-radius:5px; border:1px solid #ccc; box-sizing:border-box; }
-    button { background:#1abc9c; color:white; border:none; font-weight:bold; cursor:pointer; transition:0.3s; }
+    input, button { width:100%; margin:10px 0; padding:10px;
+      font-size:14px; border-radius:5px; border:1px solid #ccc; box-sizing:border-box; 
+    }
+
+    button {
+      background:#1abc9c; color:white; border:none;
+      font-weight:bold; cursor:pointer; transition:0.3s;
+    }
+
     button:hover { background:#16a085; }
+
     p.error { color:red; font-weight:bold; text-align:center; }
+
+    @media (max-width: 600px) {
+      header { flex-direction: column; align-items: flex-start; }
+      nav { margin-top: 10px; }
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Voting App</h1>
+    <div class="logo-container">
+      <img src="vote.jpeg" alt="Voting Logo" class="logo">
+      <h1>Voting App</h1>
+    </div>
     <nav>
       <button class="login" onclick="window.location.href='login.html'">Login</button>
       <button class="signup" onclick="window.location.href='signup.html'">Signup</button>
