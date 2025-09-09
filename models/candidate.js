@@ -15,6 +15,15 @@ const candidateSchema=new mongoose.Schema({
         type:String,
         reuired:true
     },
+     bio: {
+    type: String,
+    default: ''
+  },
+  imageUrl: {
+    type: String,
+    default: '' // allow empty -> frontend will show placeholder
+  },
+
     votes:[
         {
             user:{

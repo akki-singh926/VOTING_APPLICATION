@@ -124,8 +124,11 @@ async function loadCandidates() {
   data.candidates.forEach(c => {
     const div = document.createElement("div");
     div.className = "candidate";
-    div.innerHTML = `<span>${c.name || "N/A"} (${c.party || "N/A"}) - Votes: ${c.voteCount || 0}</span>
-                     <button onclick="vote('${c._id}')">Vote</button>`;
+    div.innerHTML = `
+      <span>${c.name || "N/A"} (${c.party || "N/A"}) - Votes: ${c.voteCount || 0}</span>
+      <button onclick="vote('${c._id}')">Vote</button>
+      <button onclick='openCandidateModal(${JSON.stringify(c)})'>View Profile</button>
+    `;
     container.appendChild(div);
   });
 }
@@ -198,6 +201,8 @@ async function addCandidate() {
   const name = document.getElementById("cName").value.trim();
   const party = document.getElementById("cParty").value.trim();
   const age = document.getElementById("cAge").value.trim();
+  const bio = document.getElementById("cBio") ? document.getElementById("cBio").value.trim() : "";
+  const imageUrl = document.getElementById("cImage") ? document.getElementById("cImage").value.trim() : "";
 
   if (!name || !party || !age) {
     document.getElementById("adminMsg").innerText = "Please fill all fields!";
@@ -207,7 +212,7 @@ async function addCandidate() {
   const res = await fetch(`${API_URL}/candidate`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ name, party, age })
+    body: JSON.stringify({ name, party, age, bio, imageUrl })
   });
 
   const data = await res.json();
@@ -226,9 +231,11 @@ async function loadAdminCandidates() {
   data.candidates.forEach(c => {
     const div = document.createElement("div");
     div.className = "candidate";
-    div.innerHTML = `<span>${c.name || "N/A"} (${c.party || "N/A"}) - Age: ${c.age || "N/A"}</span>
-                     <button onclick="updateCandidate('${c._id}')">Update</button>
-                     <button onclick="deleteCandidate('${c._id}')">Delete</button>`;
+    div.innerHTML = `
+      <span>${c.name || "N/A"} (${c.party || "N/A"}) - Age: ${c.age || "N/A"}</span>
+      <button onclick="updateCandidate('${c._id}')">Update</button>
+      <button onclick="deleteCandidate('${c._id}')">Delete</button>
+    `;
     container.appendChild(div);
   });
 }
@@ -238,12 +245,15 @@ async function updateCandidate(id) {
   const newName = prompt("Enter new name:").trim();
   const newParty = prompt("Enter new party:").trim();
   const newAge = prompt("Enter new age:").trim();
+  const newBio = prompt("Enter new bio:").trim();
+  const newImage = prompt("Enter new image URL:").trim();
+
   if (!newName || !newParty || !newAge) return alert("All fields are required!");
 
   await fetch(`${API_URL}/candidate/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ name: newName, party: newParty, age: newAge })
+    body: JSON.stringify({ name: newName, party: newParty, age: newAge, bio: newBio, imageUrl: newImage })
   });
   loadAdminCandidates();
 }
@@ -255,6 +265,20 @@ async function deleteCandidate(id) {
     headers: { Authorization: `Bearer ${token}` }
   });
   loadAdminCandidates();
+}
+
+// ----------------- CANDIDATE MODAL -----------------
+function openCandidateModal(c) {
+  document.getElementById("modalName").innerText = c.name;
+  document.getElementById("modalParty").innerText = c.party;
+  document.getElementById("modalAge").innerText = c.age;
+  document.getElementById("modalBio").innerText = c.bio || "No bio provided.";
+  document.getElementById("modalImage").src = c.imageUrl || "default.png";
+  document.getElementById("candidateModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("candidateModal").style.display = "none";
 }
 
 // ----------------- LOGOUT -----------------

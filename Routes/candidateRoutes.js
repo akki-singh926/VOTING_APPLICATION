@@ -20,9 +20,21 @@ router.post("/", jwtAuthMiddleware, async (req, res) => {
     if (!(await isAdmin(req.user.id))) {
       return res.status(403).json({ message: "Access denied. Only admin allowed." });
     }
+    const { name, party, age, bio, imageUrl } = req.body;
 
-    const data = req.body;
-    const newCandidate = new Candidate(data);
+    if (!name || !party || !age) {
+      return res.status(400).json({ error: 'name, party and age are required' });
+    }
+
+    const newCandidate = new Candidate({
+      name,
+      party,
+      age: Number(age),
+      bio: bio || '',
+      imageUrl: imageUrl || ''
+    });
+
+  
     const savedCandidate = await newCandidate.save();
 
     res.status(201).json({ message: "Candidate added successfully", candidate: savedCandidate });
