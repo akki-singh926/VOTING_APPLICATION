@@ -92,4 +92,27 @@
     <p class="error" id="signupMsg"></p>
   </div>
 </body>
+   
+  
+
+  <script>
+    // Check if admin already exists and remove admin option if true
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('http://localhost:3000/user/admin/check');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.exists) {
+            const adminOption = document.querySelector('#signupRole option[value="admin"]');
+            if (adminOption) adminOption.remove();
+          }
+        }
+      } catch (err) {
+        console.error('Failed to check admin existence:', err);
+      }
+    });
+  </script>
+</body>
 </html>
+
+

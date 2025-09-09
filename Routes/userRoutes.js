@@ -2,11 +2,26 @@ const express = require('express');
 const router = express.Router();
 const User = require('./../models/user');
 const { jwtAuthMiddleware, generateToken } = require('./../jwt');
+//check if admin already exist
+router.get('/admin/check', async (req, res) => {
+  try {
+    const admin = await User.findOne({ role: 'admin' });
+    return res.status(200).json({ exists: !!admin });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Signup
 router.post('/signup', async (req, res) => {
     try {
         let { name, age, email, mobile, address, aadharCardNumber, password, role } = req.body;
+
+        if (Number(age) < 18) {
+      return res.status(400).json({ error: 'You must be 18 or older to register' });
+    }
+
 
         if (role === "admin") {
             // Check if an admin already exists
@@ -19,7 +34,7 @@ router.post('/signup', async (req, res) => {
             role = "voter";
         }
 
-        const newUser = new User({ name, age, email, mobile, address, aadharCardNumber, password, role });
+        const newUser = new User({ name, age:Number(age) , email, mobile, address, aadharCardNumber:String(aadharCardNumber), password, role });
         const savedUser = await newUser.save();
 
         const payload = { id: savedUser.id };
@@ -36,7 +51,7 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { aadharCardNumber, password } = req.body;
-        const user = await User.findOne({ aadharCardNumber });
+        const user = await User.findOne({ aadharCardNumber:String(aadharCardNumber) });
 
         if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({ error: "Invalid username or password" });

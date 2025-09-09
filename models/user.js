@@ -24,7 +24,7 @@ const userSchema=new mongoose.Schema({
        required:true
     },
     aadharCardNumber:{
-        type:Number,
+        type:String,
         required:true,
         unique:true
     },
