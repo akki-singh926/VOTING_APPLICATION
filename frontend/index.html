@@ -5,101 +5,6 @@
   <title>Voting App - Home</title>
   <link rel="stylesheet" href="style.css">
   <script defer src="app.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f4f9;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: #3498db;
-      color: white;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-
-    nav button {
-      margin-left: 10px;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    nav button.login {
-      background: #1abc9c;
-      color: white;
-    }
-
-    nav button.signup {
-      background: #e67e22;
-      color: white;
-    }
-
-    nav button:hover {
-      opacity: 0.8;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 80px 20px;
-    }
-
-    .hero h2 {
-      font-size: 36px;
-      color: #2c3e50;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: #555;
-      margin: 20px 0;
-    }
-
-    .hero button {
-      padding: 12px 25px;
-      font-size: 16px;
-      margin: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    .hero button.login { background: #1abc9c; color: white; }
-    .hero button.signup { background: #e67e22; color: white; }
-    .hero button:hover { opacity: 0.9; }
-
-    @media (max-width: 600px) {
-      .hero h2 { font-size: 28px; }
-      .hero p { font-size: 16px; }
-      header { flex-direction: column; align-items: flex-start; }
-      nav { margin-top: 10px; }
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -113,11 +18,15 @@
     </nav>
   </header>
 
-  <section class="hero">
-    <h2>Welcome to the Most Secure Voting Web Application !</h2>
-    <p>Participate in elections, view candidates, and track results securely and easily.</p>
-    <button class="login" onclick="window.location.href='login.html'">Login</button>
-    <button class="signup" onclick="window.location.href='signup.html'">Signup</button>
+  <section class="hero-container">
+    <div class="hero-card">
+      <h2>Welcome to the Most Secure Voting Web Application!</h2>
+      <p>Participate in elections, view candidates, and track results securely and easily.</p>
+      <div class="hero-buttons">
+        <button class="login" onclick="window.location.href='login.html'">Login</button>
+        <button class="signup" onclick="window.location.href='signup.html'">Signup</button>
+      </div>
+    </div>
   </section>
 </body>
 </html>

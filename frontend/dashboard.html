@@ -6,178 +6,9 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script defer src="app.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f9;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: #3498db;
-      color: white;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-    }
-
-    header h1 { margin: 0; font-size: 24px; }
-
-    nav button {
-      margin-left: 10px;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    nav button.logout { background: #e74c3c; color: white; }
-    nav button:hover { opacity: 0.8; }
-
-    .container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
-    }
-
-    h1, h2, h3 { text-align: center; color: #2c3e50; }
-
-    .panel {
-      background: #fff;
-      padding: 20px;
-      margin-bottom: 25px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    input, button {
-      width: 100%;
-      margin: 8px 0;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-
-    button {
-      background: #3498db;
-      border: none;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover { background: #2980b9; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .candidate {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background: #f9f9f9;
-      gap: 15px;
-      transition: 0.2s;
-    }
-
-    .candidate img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .candidate:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-
-    .msg { font-weight: bold; color: green; margin-top: 5px; }
-    .btn-logout { float: right; margin-bottom: 20px; background: #e74c3c; }
-    .btn-refresh { margin-top: 10px; background: #1abc9c; }
-
-    #results p {
-      background: #ecf0f1;
-      padding: 10px;
-      border-radius: 5px;
-      margin: 5px 0;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    /* Modal styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-      position: relative;
-    }
-
-    .modal-content img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 15px;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 20px;
-      cursor: pointer;
-      font-weight: bold;
-      color: #333;
-    }
-
-    @media (max-width: 600px) {
-      header { flex-direction: column; align-items: flex-start; }
-      nav { margin-top: 10px; }
-      .grid { grid-template-columns: 1fr; }
-    }
-  </style>
 </head>
 <body>
+  <!-- HEADER -->
   <header>
     <div class="logo-container">
       <img src="vote.jpeg" alt="Voting Logo" class="logo">
@@ -189,82 +20,96 @@
   </header>
 
   <div class="container">
-    <!-- USER PROFILE -->
-    <div id="profileInfo" class="panel">
-      <h2>Your Profile</h2>
-      <p><strong>Name:</strong> <span id="profileName">Loading...</span></p>
-      <p><strong>Email:</strong> <span id="profileEmail">Loading...</span></p>
-      <p><strong>Age:</strong> <span id="profileAge">Loading...</span></p>
-      <p><strong>Role:</strong> <span id="profileRole">Loading...</span></p>
-    </div>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+      <button onclick="document.getElementById('profileInfo').scrollIntoView()">👤 Profile</button>
+      <button onclick="document.getElementById('electionPanel').scrollIntoView()">🗳️ Election</button>
+      <button onclick="document.getElementById('votePanel').scrollIntoView()">📊 Results</button>
+      <button onclick="document.getElementById('adminPanel').scrollIntoView()">⚙️ Admin</button>
+    </aside>
 
-    <!-- ELECTION PANEL -->
-    <div id="electionPanel" class="panel">
-      <h2>Election</h2>
-
-      <div id="electionStatusBox">
-        <p><strong>Current Election:</strong> <span id="electionName">—</span></p>
-        <p><strong>Status:</strong> <span id="electionStatus">—</span></p>
-        <p><strong>Start:</strong> <span id="electionStart">—</span></p>
-        <p><strong>End:</strong> <span id="electionEnd">—</span></p>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- USER PROFILE -->
+      <div id="profileInfo" class="panel">
+        <h2>Your Profile</h2>
+        <p><strong>Name:</strong> <span id="profileName">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="profileEmail">Loading...</span></p>
+        <p><strong>Age:</strong> <span id="profileAge">Loading...</span></p>
+        <p><strong>Role:</strong> <span id="profileRole">Loading...</span></p>
       </div>
 
-      <!-- Admin controls -->
-      <div id="adminElectionControls" style="display:none; margin-top:12px;">
-        <h3>Admin Controls</h3>
-
-        <input type="text" id="eName" placeholder="Election name">
-        <input type="datetime-local" id="eStart" placeholder="Start time">
-        <input type="datetime-local" id="eEnd" placeholder="End time">
-        <button onclick="createElection()">Create Election</button>
-
-        <div style="margin-top:10px;">
-          <label>Actions for current election:</label><br>
-          <button id="btnStart">Start Now</button>
-          <button id="btnClose">Close Now</button>
-        </div>
+      <!-- ELECTION PANEL -->
+      <div id="electionPanel" class="panel">
+        <h2>Election</h2>
+        <div id="electionStatusBox">
+          <p><strong>Current Election:</strong> <span id="electionName">—</span></p>
+          <p><strong>Status:</strong> <span id="electionStatus">—</span></p>
+          <p><strong>Start:</strong> <span id="electionStart">—</span></p>
+          <p><strong>End:</strong> <span id="electionEnd">—</span></p>
         </div>
 
-        
+        <!-- Admin Controls -->
+        <div id="adminElectionControls" style="display:none; margin-top:12px;">
+          <h3>Admin Controls</h3>
+          <input type="text" id="eName" placeholder="Election name">
+          <input type="datetime-local" id="eStart">
+          <input type="datetime-local" id="eEnd">
+          <button onclick="createElection()">Create Election</button>
 
-    <!-- ADMIN PANEL -->
-    <div id="adminPanel" class="panel" style="display:none;">
-      <h2>Admin Panel</h2>
-      <div class="card">
-        <input type="text" id="cName" placeholder="Candidate Name">
-        <input type="text" id="cParty" placeholder="Party">
-        <input type="number" id="cAge" placeholder="Age">
-        <input type="text" id="cBio" placeholder="Short Bio">
-        <input type="url" id="cImage" placeholder="Image URL">
-        <button onclick="addCandidate()">Add Candidate</button>
-        <p id="adminMsg" class="msg"></p>
+          <div style="margin-top:10px;">
+            <label>Actions for current election:</label><br>
+            <button id="btnStart">▶️ Start Now</button>
+            <button id="btnClose">⛔ Close Now</button>
+          </div>
+        </div>
       </div>
-      <h3>Manage Candidates</h3>
-      <div id="adminCandidates" class="grid"></div>
-    </div>
 
-    <!-- VOTER PANEL -->
-    <div id="votePanel" class="panel" style="display:none;">
-      <h2>Candidates</h2>
-      <div id="candidates" class="grid"></div>
+      <!-- ADMIN PANEL -->
+      <div id="adminPanel" class="panel" style="display:none;">
+        <h2>Admin Panel</h2>
+        <div class="card">
+          <input type="text" id="cName" placeholder="Candidate Name">
+          <input type="text" id="cParty" placeholder="Party">
+          <input type="number" id="cAge" placeholder="Age">
+          <input type="text" id="cBio" placeholder="Short Bio">
+          <input type="url" id="cImage" placeholder="Image URL">
+          <button onclick="addCandidate()">➕ Add Candidate</button>
+          <p id="adminMsg" class="msg"></p>
+        </div>
+        <h3>Manage Candidates</h3>
+        <div id="adminCandidates" class="grid"></div>
+      </div>
 
-      <h2>Results</h2>
-      <button onclick="loadResults()" class="btn-refresh">Refresh Results</button>
-      <div id="results"></div>
-      <canvas id="resultsChart" height="250"></canvas>
-    </div>
+      <!-- VOTER PANEL -->
+      <div id="votePanel" class="panel" style="display:none;">
+        <h2>Candidates</h2>
+        <div id="candidates" class="grid"></div>
+
+        <h2>Results</h2>
+        <button onclick="loadResults()" class="btn-refresh">🔄 Refresh Results</button>
+        <div id="results"></div>
+        <canvas id="resultsChart" height="250"></canvas>
+      </div>
+    </main>
   </div>
 
   <!-- Candidate Modal -->
-  <div id="candidateModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
+<div id="candidateModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <div class="modal-body">
       <img id="modalImage" src="" alt="Candidate Image">
-      <h2 id="modalName"></h2>
-      <p><strong>Party:</strong> <span id="modalParty"></span></p>
-      <p><strong>Age:</strong> <span id="modalAge"></span></p>
-      <p id="modalBio"></p>
+      <div class="modal-details">
+        <h2 id="modalName"></h2>
+        <p><strong>Party:</strong> <span id="modalParty"></span></p>
+        <p><strong>Age:</strong> <span id="modalAge"></span></p>
+        <p id="modalBio"></p>
+      </div>
     </div>
   </div>
+</div>
+
+
 </body>
 </html>
