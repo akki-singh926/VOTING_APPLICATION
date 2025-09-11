@@ -40,7 +40,14 @@ const userSchema=new mongoose.Schema({
     isVoted:{
         type:Boolean,
         default:false
+    },
+    notifications: [
+    {
+      message: { type: String },
+      createdAt: { type: Date, default: Date.now },
+      read: { type: Boolean, default: false }
     }
+  ]
 
     
 

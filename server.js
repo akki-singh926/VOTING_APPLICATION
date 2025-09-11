@@ -15,6 +15,9 @@ const userRoutes=require('./Routes/userRoutes');
 app.use('/user',userRoutes);
 const candidateRoutes=require('./Routes/candidateRoutes');
 app.use('/candidate',candidateRoutes);
+const electionRoutes = require('./Routes/electionRoutes');
+app.use('/election', electionRoutes);
+
 app.listen(port,()=>{
     console.log("Listening on port 3000");
 })

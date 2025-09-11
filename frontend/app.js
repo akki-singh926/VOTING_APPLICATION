@@ -91,11 +91,16 @@ async function loadProfile() {
     // Show panels based on role
     if (user.role === "admin") {
       document.getElementById("adminPanel").style.display = "block";
+      document.getElementById("adminElectionControls").style.display = "block"; // ✅ Show election controls
       loadAdminCandidates();
+      loadElectionPhase(); 
+      loadCurrentElection();
     } else {
       document.getElementById("votePanel").style.display = "block";
+      loadElectionPhase(); 
       loadCandidates();
       loadResults();
+      loadCurrentElection();
     }
 
   } catch (err) {
@@ -105,11 +110,12 @@ async function loadProfile() {
   }
 }
 
+
 // ----------------- DASHBOARD PAGE LOAD -----------------
 document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("dashboard.html")) {
     if (!token) window.location.href = "index.html";
-    else loadProfile(); // fetch profile and show correct panels
+    else loadProfile();
   }
 });
 
@@ -161,7 +167,6 @@ async function loadResults() {
     return;
   }
 
-  // Scrollable text results
   const scrollDiv = document.createElement("div");
   scrollDiv.style.maxHeight = "200px";
   scrollDiv.style.overflowY = "auto";
@@ -172,7 +177,6 @@ async function loadResults() {
   });
   container.appendChild(scrollDiv);
 
-  // Chart.js canvas
   const canvas = document.getElementById("resultsChart");
   if (window.resultsChart && typeof window.resultsChart.destroy === "function") {
     window.resultsChart.destroy();
@@ -280,6 +284,158 @@ function openCandidateModal(c) {
 function closeModal() {
   document.getElementById("candidateModal").style.display = "none";
 }
+
+// ----------------- ELECTION PHASE (simple) -----------------
+async function loadElectionPhase() {
+  try {
+    const res = await fetch(`${API_URL}/election/phase`);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || "Failed to fetch election phase");
+
+    const phaseEl = document.getElementById("electionPhase");
+    if (phaseEl) phaseEl.innerText = data.phase || "Not declared";
+
+    if (data.phase !== "Voting") {
+      const voteButtons = document.querySelectorAll("#candidates button:first-child");
+      voteButtons.forEach(btn => { btn.disabled = true; btn.innerText = "Voting Disabled"; });
+    }
+  } catch (err) {
+    console.error("Error loading election phase:", err);
+  }
+}
+
+async function updateElectionPhase(newPhase) {
+  try {
+    const res = await fetch(`${API_URL}/election/phase`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ phase: newPhase })
+    });
+    const data = await res.json();
+    alert(data.message || "Election phase updated");
+    loadElectionPhase();
+  } catch (err) {
+    console.error("Error updating phase:", err);
+  }
+}
+
+// ----------------- NEW: FULL ELECTION MANAGEMENT -----------------
+async function loadCurrentElection() {
+  try {
+    const res = await fetch(`${API_URL}/election/current`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || "Failed to fetch current election");
+
+    if (!data.election) {
+      document.getElementById("electionName").innerText = "—";
+      document.getElementById("electionStatus").innerText = "No active election";
+      document.getElementById("electionStart").innerText = "—";
+      document.getElementById("electionEnd").innerText = "—";
+
+      // clear stored id
+      window.currentElectionId = null;
+
+      // disable buttons when no election
+      const btnStart = document.getElementById("btnStart");
+      const btnClose = document.getElementById("btnClose");
+     
+
+      if (btnStart) btnStart.disabled = true;
+      if (btnClose) btnClose.disabled = true;
+      
+
+      return;
+    }
+
+    const e = data.election;
+
+    // Fill UI fields
+    document.getElementById("electionName").innerText = e.name;
+    document.getElementById("electionStatus").innerText = e.status;
+    document.getElementById("electionStart").innerText = new Date(e.startAt).toLocaleString();
+    document.getElementById("electionEnd").innerText = new Date(e.endAt).toLocaleString();
+
+    // store id globally so buttons can use it
+    window.currentElectionId = e._id;
+
+    // enable buttons now that election exists
+    const btnStart = document.getElementById("btnStart");
+    const btnClose = document.getElementById("btnClose");
+   
+
+    if (btnStart) {
+      btnStart.disabled = false;
+      btnStart.onclick = () => startElection(window.currentElectionId);
+    }
+
+    if (btnClose) {
+      btnClose.disabled = false;
+      btnClose.onclick = () => closeElection(window.currentElectionId);
+    }
+
+  
+  } catch (err) {
+    console.error("Error loading current election:", err);
+  }
+}
+
+
+async function createElection() {
+  const name = document.getElementById("eName").value.trim();
+  const startAt = document.getElementById("eStart").value;
+  const endAt = document.getElementById("eEnd").value;
+
+  if (!name || !startAt || !endAt) return alert("All fields required!");
+
+  const res = await fetch(`${API_URL}/election`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ name, startAt, endAt })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) return alert(data.error || "Failed to create election");
+
+  alert(`Election "${data.election.name}" created successfully`);
+  loadCurrentElection();
+}
+
+async function startElection(id) {
+  if (!id) return alert("No election id!");
+  const res = await fetch(`${API_URL}/election/${id}/start`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const data = await res.json();
+
+  if (!res.ok) return alert(data.error || "Failed to start election");
+
+  alert("Election started successfully");
+  loadCurrentElection();
+}
+
+async function closeElection(id) {
+  if (!id) return alert("No election id!");
+  const res = await fetch(`${API_URL}/election/${id}/close`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const data = await res.json();
+
+  if (!res.ok) return alert(data.error || "Failed to close election");
+
+  alert("Election closed successfully");
+  loadCurrentElection();
+}
+
+
+
+
 
 // ----------------- LOGOUT -----------------
 function logout() {

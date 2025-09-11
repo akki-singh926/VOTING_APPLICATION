@@ -3,6 +3,7 @@ const router = express.Router();
 const Candidate = require("./../models/candidate");
 const User = require("./../models/user");
 const { jwtAuthMiddleware } = require("../jwt");
+const Election = require('../models/election');
 
 // 🔹 Check if user is admin
 const isAdmin = async (userID) => {
@@ -93,6 +94,10 @@ router.delete("/:candidateID", jwtAuthMiddleware, async (req, res) => {
 
 // ----------------- VOTER: Cast vote -----------------
 router.post("/votes/:candidateID", jwtAuthMiddleware, async (req, res) => {
+  const ongoing = await Election.findOne({ status: 'ongoing' });
+if (!ongoing) {
+  return res.status(400).json({ message: 'Voting is not active right now' });
+}
   const candidateID = req.params.candidateID;
   const userID = req.user.id;
 

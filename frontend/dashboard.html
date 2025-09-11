@@ -198,6 +198,35 @@
       <p><strong>Role:</strong> <span id="profileRole">Loading...</span></p>
     </div>
 
+    <!-- ELECTION PANEL -->
+    <div id="electionPanel" class="panel">
+      <h2>Election</h2>
+
+      <div id="electionStatusBox">
+        <p><strong>Current Election:</strong> <span id="electionName">—</span></p>
+        <p><strong>Status:</strong> <span id="electionStatus">—</span></p>
+        <p><strong>Start:</strong> <span id="electionStart">—</span></p>
+        <p><strong>End:</strong> <span id="electionEnd">—</span></p>
+      </div>
+
+      <!-- Admin controls -->
+      <div id="adminElectionControls" style="display:none; margin-top:12px;">
+        <h3>Admin Controls</h3>
+
+        <input type="text" id="eName" placeholder="Election name">
+        <input type="datetime-local" id="eStart" placeholder="Start time">
+        <input type="datetime-local" id="eEnd" placeholder="End time">
+        <button onclick="createElection()">Create Election</button>
+
+        <div style="margin-top:10px;">
+          <label>Actions for current election:</label><br>
+          <button id="btnStart">Start Now</button>
+          <button id="btnClose">Close Now</button>
+        </div>
+        </div>
+
+        
+
     <!-- ADMIN PANEL -->
     <div id="adminPanel" class="panel" style="display:none;">
       <h2>Admin Panel</h2>

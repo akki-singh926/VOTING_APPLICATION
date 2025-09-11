@@ -78,6 +78,20 @@ router.get('/profile', jwtAuthMiddleware, async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+router.get('/notifications', jwtAuthMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('notifications');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // Optional: sort by newest first
+    const sortedNotifications = (user.notifications || []).sort((a, b) => b.createdAt - a.createdAt);
+
+    res.json({ notifications: sortedNotifications });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Update Password
 router.put('/profile/password', jwtAuthMiddleware, async (req, res) => {
