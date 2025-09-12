@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = 'https://voting-application-ard7.onrender.com'
 let token = localStorage.getItem("token") || null;
 let userRole = localStorage.getItem("role") || null;
 
