@@ -2,8 +2,8 @@ const mongoose=require('mongoose');
 require('dotenv').config();
 //const password = encodeURIComponent(process.env.DB_PASS);
 
-//const mongoURL = process.env.URL;
-const mongoURL=process.env.LOCAL;
+const mongoURL = process.env.URL;
+//const mongoURL=process.env.LOCAL;
 
 mongoose.connect(mongoURL,{
     useNewUrlParser:true,
